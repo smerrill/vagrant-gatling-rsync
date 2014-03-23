@@ -1,29 +1,14 @@
-# Vagrant::Gatling::Rsync
+# vagrant-gatling-rsync
 
-TODO: Write a gem description
+An rsync watcher for Vagrant 1.5+ that uses fewer host resources at the
+potential cost of more rsync actions.
 
-## Installation
+The built-in rsync-auto plugin sometimes uses a lot of CPU and disk I/O when
+it starts up on very large rsynced directories. This plugin is designed to
+work well with such large rsynced folders.
 
-Add this line to your application's Gemfile:
+## Authors
 
-    gem 'vagrant-gatling-rsync'
+Steven Merrill
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install vagrant-gatling-rsync
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it ( http://github.com/<my-github-username>/vagrant-gatling-rsync/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Doug Marcey
