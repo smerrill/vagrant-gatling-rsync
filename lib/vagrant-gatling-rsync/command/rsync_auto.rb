@@ -20,14 +20,6 @@ module VagrantPlugins
       def execute
         @logger = Log4r::Logger.new("vagrant::commands::gatling-rsync-auto")
 
-        # @TODO: Move these to their own classes.
-        @listener = case RUBY_PLATFORM
-                    when /darwin/
-                      :osx
-                    else
-                      raise Errors::OnlyOSXSupportError
-                    end
-
         opts = OptionParser.new do |o|
           o.banner = "Usage: vagrant gatling-rsync-auto [vm-name]"
           o.separator ""
@@ -82,27 +74,20 @@ module VagrantPlugins
           @logger.info("  -- #{ignore.to_s}")
         end
 
-        case @listener
-        when :osx
-          # @TODO: Add config options to set these things.
-          listen_osx(paths, ignores, {:latency => 1.5, :no_defer => false })
-        when :linux
+        # @TODO: Make this a configuration option.
+        latency = 1.75
+
+        case RUBY_PLATFORM
+        when /darwin/
+          ListenOSX.new(paths, ignores, latency, @logger, self.method(:callback)).run
+        when /linux/
+          ListenLinux.new(paths, ignores, latency, @logger, self.method(:callback)).run
+        else
+          # @TODO: Raise this earlier?
+          raise Errors::OnlyOSXLinuxSupportError
         end
 
         0
-      end
-
-      def listen_osx(paths, ignores, options)
-        require "rb-fsevent"
-
-        @logger.info("Listening via: rb-fsevent on Mac OS X.")
-
-
-        fsevent = FSEvent.new
-        fsevent.watch paths.keys, options do |directories|
-          callback(paths, ignores, directories)
-        end
-        fsevent.run
       end
 
       def listen_linux
