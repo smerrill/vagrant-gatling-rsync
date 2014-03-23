@@ -5,9 +5,10 @@ require "listen"
 
 require "vagrant"
 
-# @TODO: Move to separate listener classes with these dependencies.
-require "rb-fsevent"
-require "rb-inotify"
+begin
+  require "pry"
+rescue LoadError
+end
 
 module VagrantPlugins
   module GatlingRsync
@@ -21,7 +22,7 @@ module VagrantPlugins
       def execute
         @logger = Log4r::Logger.new("vagrant::commands::gatling-rsync-auto")
 
-        # @TODO: Move to its own class.
+        # @TODO: Move these to their own classes.
         @listener = case RUBY_PLATFORM
                     when /darwin/
                       :osx
@@ -68,7 +69,7 @@ module VagrantPlugins
 
             if folder_opts[:exclude]
               Array(folder_opts[:exclude]).each do |pattern|
-                ignores << RsyncHelper.exclude_to_regexp(hostpath, pattern.to_s)
+                ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(hostpath, pattern.to_s)
               end
             end
           end
@@ -93,7 +94,7 @@ module VagrantPlugins
         case @listener
         when :osx
           # @TODO: Add config options to set these things.
-          listen_osx({:latency => 1.5, :no_defer => false })
+          listen_osx(paths, ignores, {:latency => 1.5, :no_defer => false })
         when :linux
         end
 
@@ -101,19 +102,14 @@ module VagrantPlugins
       end
 
       def listen_osx(paths, ignores, options)
-        @logger.info("Listening via: rb-fsevents on Mac OS X.")
-        fsevent = fsevent.new
-        paths.each do |path|
-          fsevent.watch path, options do |directories|
-            callback(paths, directories)
+        require "rb-fsevent"
 
-            #if directories.select { |i| !i.match("\.(git|idea|svn|hg|cvs)") }.empty?
-            #puts "discarding these changes: #{directories.inspect}"
-            #else
-            #puts "detected change inside: #{directories.inspect}"
-            #system("vagrant rsync") 
-            #end
-          end
+        @logger.info("Listening via: rb-fsevent on Mac OS X.")
+
+
+        fsevent = FSEvent.new
+        fsevent.watch paths.keys, options do |directories|
+          callback(paths, ignores, directories)
         end
         fsevent.run
       end
@@ -122,20 +118,25 @@ module VagrantPlugins
       end
 
       # This callback gets called when any directory changes.
-      def callback(paths, modified)
+      def callback(paths, ignores, modified)
         @logger.info("File change callback called!")
         @logger.info("  - Paths: #{paths.inspect}")
+        @logger.info("  - Ignores: #{ignores.inspect}")
         @logger.info("  - Modified: #{modified.inspect}")
-        return
 
         tosync = []
         paths.each do |hostpath, folders|
           # Find out if this path should be synced
           found = catch(:done) do
-            [modified, added, removed].each do |changed|
-              changed.each do |listenpath|
-                throw :done, true if listenpath.start_with?(hostpath)
+            modified.each do |changed|
+              match = nil
+              ignores.each do |ignore|
+                next unless match.nil?
+                match = ignore.match(changed)
               end
+
+              next unless match.nil?
+              throw :done, true if changed.start_with?(hostpath)
             end
 
             # Make sure to return false if all else fails so that we
