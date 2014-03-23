@@ -33,9 +33,9 @@ module VagrantPlugins
             @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
           end
 
-          @logger.info("Detected changes to #{directories.inspect}.")
+          @logger.info("Detected changes to #{directories.inspect}.") unless directories.empty?
 
-          @callback.call(@paths, @ignores, directories) if directories.size
+          @callback.call(@paths, @ignores, directories) unless directories.empty?
         end
       end
     end

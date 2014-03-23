@@ -8,6 +8,9 @@ module VagrantPlugins
         @ignores = ignores
         @latency = latency
         @options = {
+          # We set this to a small value to ensure that we can coalesce the
+          # events together to prevent rsyncing too often under heavy write
+          # load.
           :latency => 0.1,
           :no_defer => false,
         }
@@ -29,21 +32,19 @@ module VagrantPlugins
           directories = Set.new
           begin
             while true do
-              puts "Starting the timeout at #{Time.now.to_s}."
+              @logger.info("Starting the timeout at #{Time.now.to_s}.")
               change = Timeout::timeout(@latency) {
                 changes.pop
               }
-              p change
               directories << change unless change.nil?
             end
           rescue Timeout::Error
-            puts "Breaking out of the loop at #{Time.now.to_s}."
             @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
           end
 
-          @logger.info("Detected changes to #{directories.inspect}.")
+          @logger.info("Detected changes to #{directories.inspect}.") unless directories.empty?
 
-          @callback.call(@paths, @ignores, directories) if directories.size
+          @callback.call(@paths, @ignores, directories) unless directories.empty?
         end
       end
     end
