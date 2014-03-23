@@ -10,8 +10,6 @@ if Vagrant::VERSION < "1.5.0"
   raise Errors::Vagrant15RequiredError
 end
 
-# @TODO: Bail out if not on Mac.
-
 module VagrantPlugins
   module GatlingRsync
     class Plugin < Vagrant.plugin("2")
