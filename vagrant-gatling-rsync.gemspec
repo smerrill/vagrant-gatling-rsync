@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'vagrant/gatling/rsync/version'
+require 'vagrant-gatling-rsync/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "vagrant-gatling-rsync"
-  spec.version       = Vagrant::Gatling::Rsync::VERSION
+  spec.version       = VagrantPlugins::GatlingRsync::VERSION
   spec.authors       = ["Steven Merrill"]
   spec.email         = ["steven.merrill@gmail.com"]
   spec.summary       = %q{A lighter-weight Vagrant plugin for watching and rsyncing directories.}
