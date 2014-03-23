@@ -1,8 +1,6 @@
 require "log4r"
 require "optparse"
 
-require "listen"
-
 require "vagrant"
 
 begin
