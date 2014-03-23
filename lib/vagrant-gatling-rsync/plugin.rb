@@ -1,8 +1,4 @@
-begin
-  require "vagrant"
-rescue LoadError
-  raise "The gatling rsync command must be run within Vagrant."
-end
+require "vagrant"
 
 # This is a sanity check to make sure no one is attempting to install
 # this into an early Vagrant version.
@@ -23,7 +19,7 @@ module VagrantPlugins
 
       command "gatling-rsync-auto" do
         require_relative "command/rsync_auto"
-        Command
+        GatlingRsyncAuto
       end
 
     end
