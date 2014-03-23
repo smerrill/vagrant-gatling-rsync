@@ -26,15 +26,8 @@ module VagrantPlugins
         @listener = case RUBY_PLATFORM
                     when /darwin/
                       :osx
-                    when /linux/
-                      # @TODO: Use a subclass of Vagrant::Errors::VagrantError,
-                      # or finish inotify support.
-                      raise "This plugin currently only supports Max OS X hosts."
-                      :linux
                     else
-                      # @TODO: Use a subclass of Vagrant::Errors::VagrantError.
-                      raise "This plugin currently only supports Mac OS X and Linux hosts."
-                      return 1
+                      raise Errors::OnlyOSXSupportError
                     end
 
         opts = OptionParser.new do |o|

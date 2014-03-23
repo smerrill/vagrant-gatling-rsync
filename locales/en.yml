@@ -1,0 +1,6 @@
+en:
+  vagrant_gatling_rsync:
+    errors:
+      only_osx_support: |-
+        This plugin currently only supports Max OS X hosts.
+
