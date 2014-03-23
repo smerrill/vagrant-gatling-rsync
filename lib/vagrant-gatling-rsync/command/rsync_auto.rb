@@ -5,6 +5,10 @@ require "listen"
 
 require "vagrant"
 
+# @TODO: Move to separate listener classes with these dependencies.
+require "rb-fsevent"
+require "rb-inotify"
+
 module VagrantPlugins
   module GatlingRsync
     class GatlingRsyncAuto < Vagrant.plugin(2, :command)
@@ -17,15 +21,20 @@ module VagrantPlugins
       def execute
         @logger = Log4r::Logger.new("vagrant::commands::gatling-rsync-auto")
 
-        @plugin_os = case RUBY_PLATFORM
-                       when /darwin/
-                         :osx
-                       when /linux/
-                         :linux
-                       else
-                         # @TODO: Convert to a subclass of Vagrant::Errors::VagrantError.
-                         raise "This plugin currently only supports Mac OS X and Linux hosts."
-                     end
+        # @TODO: Move to its own class.
+        @listener = case RUBY_PLATFORM
+                    when /darwin/
+                      :osx
+                    when /linux/
+                      # @TODO: Use a subclass of Vagrant::Errors::VagrantError,
+                      # or finish inotify support.
+                      raise "This plugin currently only supports Max OS X hosts."
+                      :linux
+                    else
+                      # @TODO: Use a subclass of Vagrant::Errors::VagrantError.
+                      raise "This plugin currently only supports Mac OS X and Linux hosts."
+                      return 1
+                    end
 
         opts = OptionParser.new do |o|
           o.banner = "Usage: vagrant gatling-rsync-auto [vm-name]"
@@ -80,24 +89,44 @@ module VagrantPlugins
         ignores.each do |ignore|
           @logger.info("  -- #{ignore.to_s}")
         end
-        @logger.info("Listening via: #{Listen::Adapter.select.inspect}")
 
-        # @TODO: Check version.
-
-        callback = method(:callback).to_proc.curry[paths]
-        listener = Listen.to(*paths.keys, ignore: ignores, &callback)
-        listener.start
-        listener.thread.join
+        case @listener
+        when :osx
+          # @TODO: Add config options to set these things.
+          listen_osx({:latency => 1.5, :no_defer => false })
+        when :linux
+        end
 
         0
       end
 
-      # This is the callback that is called when any changes happen
-      def callback(paths, modified, added, removed)
+      def listen_osx(paths, ignores, options)
+        @logger.info("Listening via: rb-fsevents on Mac OS X.")
+        fsevent = fsevent.new
+        paths.each do |path|
+          fsevent.watch path, options do |directories|
+            callback(paths, directories)
+
+            #if directories.select { |i| !i.match("\.(git|idea|svn|hg|cvs)") }.empty?
+            #puts "discarding these changes: #{directories.inspect}"
+            #else
+            #puts "detected change inside: #{directories.inspect}"
+            #system("vagrant rsync") 
+            #end
+          end
+        end
+        fsevent.run
+      end
+
+      def listen_linux
+      end
+
+      # This callback gets called when any directory changes.
+      def callback(paths, modified)
         @logger.info("File change callback called!")
+        @logger.info("  - Paths: #{paths.inspect}")
         @logger.info("  - Modified: #{modified.inspect}")
-        @logger.info("  - Added: #{added.inspect}")
-        @logger.info("  - Removed: #{removed.inspect}")
+        return
 
         tosync = []
         paths.each do |hostpath, folders|

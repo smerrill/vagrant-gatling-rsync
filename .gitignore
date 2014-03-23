@@ -18,3 +18,4 @@ tmp
 *.swp
 *.swo
 example/files/*
+example/vagrant/.vagrant
