@@ -8,7 +8,7 @@ module VagrantPlugins
         @ignores = ignores
         @latency = latency
         @options = {
-          :latency => latency,
+          :latency => 0.1,
           :no_defer => false,
         }
         @logger = logger
@@ -31,14 +31,12 @@ module VagrantPlugins
             while true do
               puts "Starting the timeout at #{Time.now.to_s}."
               change = Timeout::timeout(@latency) {
-                a = changes.pop
-                a
+                changes.pop
               }
               p change
               directories << change unless change.nil?
             end
-          rescue Timeout::Error => e
-            p e.backtrace
+          rescue Timeout::Error
             puts "Breaking out of the loop at #{Time.now.to_s}."
             @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
           end
