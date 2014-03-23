@@ -33,9 +33,9 @@ directories hierarchies with 10,000-100,000 files.
 
 ## Event coalescing
 
-This plugin also coalesces events for you. The default latency is 2 seconds.
-This will be a configurable option in future versions. If you specify a latency
-of two seconds, this plugin will not fire a `vagrant rsync` until two
+This plugin also coalesces events for you. The default latency is 1.5 seconds.
+(This will be a configurable option in future versions.) If you specify a
+latency of two seconds, this plugin will not fire a `vagrant rsync` until two
 contiguous seconds without file events have passed. This will delay rsyncs from
 happening if many writes are happening on the host (during a `make` or a
-`git clone`, for example.)
+`git clone`, for example) until the activity has leveled off.

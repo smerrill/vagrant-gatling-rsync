@@ -1,0 +1,15 @@
+## 0.0.1 (March 23, 2014)
+
+Initial release.
+
+FEATURES:
+
+- Implement an rb-fsevent adapter for Mac.
+- Implement an rb-inotify adapter for Linux.
+- Add the `vagrant gatling-rsync-auto` command.
+
+## Backlog
+
+- Test and release the Windows adapter.
+- Implement a config option to allow changing the latency from 1.5 seconds.
+- Allow configuring and running the rsync daemon to avoid SSH overhead.
