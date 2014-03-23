@@ -10,6 +10,10 @@ module VagrantPlugins
       class OnlyOSXSupportError < VagrantGatlingRsyncError
         error_key(:only_osx_support)
       end
+
+      class Vagrant15RequiredError < VagrantGatlingRsyncError
+        error_key(:vagrant_15_required)
+      end
     end
   end
 end

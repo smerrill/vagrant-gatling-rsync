@@ -7,8 +7,7 @@ end
 # This is a sanity check to make sure no one is attempting to install
 # this into an early Vagrant version.
 if Vagrant::VERSION < "1.5.0"
-  # @TODO: Convert to a subclass of Vagrant::Errors::VagrantError.
-  raise "The Vagrant gatling rsync plugin requires Vagrant 1.5 or newer."
+  raise Errors::Vagrant15RequiredError
 end
 
 # @TODO: Bail out if not on Mac.
