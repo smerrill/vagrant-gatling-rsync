@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Vagrant::Gatling::Rsync::VERSION
   spec.authors       = ["Steven Merrill"]
   spec.email         = ["steven.merrill@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{A lighter-weight Vagrant plugin for watching and rsyncing directories.}
+  spec.description   = %q{The gatling-rsync plugin run on Mac (and soon on Linux) and is far less CPU-intensive than the built-in 'vagrant rsync-auto' plugin, at the cost of possibly rsyncing more often.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
