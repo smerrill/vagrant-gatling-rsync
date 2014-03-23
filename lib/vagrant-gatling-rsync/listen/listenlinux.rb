@@ -30,7 +30,7 @@ module VagrantPlugins
               events.each { |e| directories << e.absolute_name }
             end
           rescue Timeout::Error
-            puts "Breaking out of the loop at #{Time.now.to_s}"
+            @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
           end
 
           @logger.info("Detected changes to #{directories.inspect}.")

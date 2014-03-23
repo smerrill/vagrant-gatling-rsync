@@ -75,7 +75,7 @@ module VagrantPlugins
         end
 
         # @TODO: Make this a configuration option.
-        latency = 1.75
+        latency = 5
 
         case RUBY_PLATFORM
         when /darwin/
