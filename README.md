@@ -30,7 +30,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rsync__exclude: [".git/", ".idea/"]
 
   # Configure the window for gatling to coalesce writes.
-  config.gatling.latency = 2.5
+  if Vagrant.has_plugin?("vagrant-gatling-rsync")
+    config.gatling.latency = 2.5
+  end
 end
 ```
 
