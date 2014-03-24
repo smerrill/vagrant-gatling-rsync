@@ -13,4 +13,4 @@ FEATURES:
 
 - Test and release the Windows adapter.
 - Allow configuring and running the rsync daemon to avoid SSH overhead.
-- Configure latency per machine - the last path processed will win currently.
+- Get latency validation working.

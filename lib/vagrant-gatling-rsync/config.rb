@@ -13,8 +13,10 @@ module VagrantPlugins
         @latency = 1.5 if @latency == UNSET_VALUE
       end
 
+      # @TODO: This does not appear to be called.
       def validate(machine)
-        puts 'Hi validate'
+        require "pry"
+        binding.pry
         errors = _detected_errors
 
         if @latency == UNSET_VALUE

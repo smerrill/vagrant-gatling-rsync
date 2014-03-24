@@ -29,10 +29,14 @@ module VagrantPlugins
         argv = parse_options(opts)
         return if !argv
 
+        latency = nil
+
         # Build up the paths that we need to listen to.
         paths = {}
         ignores = []
         with_target_vms(argv) do |machine|
+          latency = machine.config.gatling.latency
+
           folders = synced_folders(machine)[:rsync]
           next if !folders || folders.empty?
 
@@ -58,7 +62,6 @@ module VagrantPlugins
           end
         end
 
-        latency = 1.5
         # Output to the user what paths we'll be watching
         paths.keys.sort.each do |path|
           paths[path].each do |path_opts|
@@ -66,9 +69,6 @@ module VagrantPlugins
               "vagrant.rsync_auto_path",
               path: path.to_s,
             ))
-
-            # @TODO: This is broken. The last machine's latency will win.
-            latency = path_opts[:machine].config.gatling.latency
           end
         end
 
