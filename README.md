@@ -31,6 +31,9 @@ The downside of using Listen is that it takes a large amount of host resources
 to monitor large directory structures. This gem works well with to monitor
 directories hierarchies with 10,000-100,000 files.
 
+This gem's implementation is much closer to the underlying fsevent or inotify
+APIs, which allows for higher performance.
+
 ## Event coalescing
 
 This plugin also coalesces events for you. The default latency is 1.5 seconds.
@@ -39,3 +42,32 @@ latency of two seconds, this plugin will not fire a `vagrant rsync` until two
 contiguous seconds without file events have passed. This will delay rsyncs from
 happening if many writes are happening on the host (during a `make` or a
 `git clone`, for example) until the activity has leveled off.
+
+## Working with this plugin
+
+Add the following information to the Vagrantfile to set the coalescing
+threshold in seconds. If you do not set it, it will default to 1.5.
+
+You will also need to have at least one synced folder set to type "rsync"
+to use the plugin.
+
+```ruby
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "hashicorp/precise64"
+
+  config.vm.synced_folder "../files", "/opt/vagrant/rsynced_folder", type: "rsync",
+    rsync__exclude: [".git/", ".idea/"]
+
+  # Configure the window for gatling to coalesce writes.
+  config.gatling.latency = 2.5
+end
+```
+
+With the Vagrantfile configured in this fashion, you can run the following
+command to sync files.
+
+```bash
+vagrant gatling-rsync-auto
+```
