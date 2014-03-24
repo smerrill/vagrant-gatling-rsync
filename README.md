@@ -3,14 +3,43 @@
 An rsync watcher for Vagrant 1.5+ that uses fewer host resources at the
 potential cost of more rsync actions.
 
-## Authors
+## Getting started
 
-Steven Merrill (@stevenmerrill) originally had the idea to tap into rb-fsevent
-and rb-inotify to more efficiently rsync files.
+To get started, you need to have Vagrant 1.5.1 installed on your Linux or
+Mac OS X host machine. To install the plugin, use the following command.
 
-Doug Marcey (@dougmarcey) provided considerable guidance in the implementation
-of the coalescing functionality and wrote the initial sketch of the Linux and
-Windows adapters.
+```bash
+vagrant plugin install vagrant-gatling-rsync
+```
+
+## Working with this plugin
+
+Add the following information to the Vagrantfile to set the coalescing
+threshold in seconds. If you do not set it, it will default to 1.5.
+
+You will also need to have at least one synced folder set to type "rsync"
+to use the plugin.
+
+```ruby
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "hashicorp/precise64"
+
+  config.vm.synced_folder "../files", "/opt/vagrant/rsynced_folder", type: "rsync",
+    rsync__exclude: [".git/", ".idea/"]
+
+  # Configure the window for gatling to coalesce writes.
+  config.gatling.latency = 2.5
+end
+```
+
+With the Vagrantfile configured in this fashion, you can run the following
+command to sync files.
+
+```bash
+vagrant gatling-rsync-auto
+```
 
 ## Why "gatling"?
 
@@ -43,31 +72,12 @@ contiguous seconds without file events have passed. This will delay rsyncs from
 happening if many writes are happening on the host (during a `make` or a
 `git clone`, for example) until the activity has leveled off.
 
-## Working with this plugin
+## Authors
 
-Add the following information to the Vagrantfile to set the coalescing
-threshold in seconds. If you do not set it, it will default to 1.5.
+Steven Merrill (@stevenmerrill) originally had the idea to tap into rb-fsevent
+and rb-inotify to more efficiently rsync files.
 
-You will also need to have at least one synced folder set to type "rsync"
-to use the plugin.
+Doug Marcey (@dougmarcey) provided considerable guidance in the implementation
+of the coalescing functionality and wrote the initial sketch of the Linux and
+Windows adapters.
 
-```ruby
-VAGRANTFILE_API_VERSION = "2"
-
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "hashicorp/precise64"
-
-  config.vm.synced_folder "../files", "/opt/vagrant/rsynced_folder", type: "rsync",
-    rsync__exclude: [".git/", ".idea/"]
-
-  # Configure the window for gatling to coalesce writes.
-  config.gatling.latency = 2.5
-end
-```
-
-With the Vagrantfile configured in this fashion, you can run the following
-command to sync files.
-
-```bash
-vagrant gatling-rsync-auto
-```
