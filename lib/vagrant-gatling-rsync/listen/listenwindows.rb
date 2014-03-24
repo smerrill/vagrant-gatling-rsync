@@ -23,10 +23,11 @@ while true do
       directories << change.path
     end
   rescue Timeout::Error
-    puts "Breaking out of the loop at #{Time.now.to_s}"
+    @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
   end
-  puts directories.inspect
 
-  #callback(paths, ignores, directories) if directories.size
+  @logger.info(directories.inspect) unless directories.empty?
+
+  #@callback.call(paths, ignores, directories) unless directories.empty?
 end
 

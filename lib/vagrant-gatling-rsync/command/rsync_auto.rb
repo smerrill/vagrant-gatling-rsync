@@ -78,8 +78,6 @@ module VagrantPlugins
           @logger.info("  -- #{ignore.to_s}")
         end
 
-        puts latency
-
         case RUBY_PLATFORM
         when /darwin/
           ListenOSX.new(paths, ignores, latency, @logger, self.method(:callback)).run
