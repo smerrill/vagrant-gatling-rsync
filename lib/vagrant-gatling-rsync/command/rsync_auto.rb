@@ -3,11 +3,6 @@ require "optparse"
 
 require "vagrant"
 
-begin
-  require "pry"
-rescue LoadError
-end
-
 module VagrantPlugins
   module GatlingRsync
     class GatlingRsyncAuto < Vagrant.plugin(2, :command)
