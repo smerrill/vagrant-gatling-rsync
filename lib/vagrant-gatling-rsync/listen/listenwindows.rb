@@ -13,10 +13,10 @@ paths.keys.each do |path|
 end
 Thread.new { monitor.run! }
 
-while true do
+loop do
   directories = Set.new
   begin
-    while true do
+    loop do
       change = Timeout::timeout(latency) {
         changes.pop
       }

@@ -28,10 +28,10 @@ module VagrantPlugins
         end
         Thread.new { fsevent.run }
 
-        while true do
+        loop do
           directories = Set.new
           begin
-            while true do
+            loop do
               @logger.info("Starting the timeout at #{Time.now.to_s}.")
               change = Timeout::timeout(@latency) {
                 changes.pop

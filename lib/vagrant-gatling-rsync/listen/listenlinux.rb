@@ -19,10 +19,10 @@ module VagrantPlugins
           notifier.watch(path, :modify, :create, :delete, :recursive) {}
         end
 
-        while true do
+        loop do
           directories = Set.new
           begin
-            while true do
+            loop do
               events = []
               events = Timeout::timeout(@latency) {
                 notifier.read_events
