@@ -7,9 +7,10 @@ FEATURES:
 - Implement an rb-fsevent adapter for Mac.
 - Implement an rb-inotify adapter for Linux.
 - Add the `vagrant gatling-rsync-auto` command.
+- Implement the first draft of a config option to allow changing the latency.
 
 ## Backlog
 
 - Test and release the Windows adapter.
-- Implement a config option to allow changing the latency from 1.5 seconds.
 - Allow configuring and running the rsync daemon to avoid SSH overhead.
+- Configure latency per machine - the last path processed will win currently.

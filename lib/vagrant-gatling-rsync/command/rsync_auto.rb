@@ -47,7 +47,7 @@ module VagrantPlugins
             paths[hostpath] << {
               id: id,
               machine: machine,
-              opts:    folder_opts,
+              opts: folder_opts,
             }
 
             if folder_opts[:exclude]
@@ -58,6 +58,7 @@ module VagrantPlugins
           end
         end
 
+        latency = 1.5
         # Output to the user what paths we'll be watching
         paths.keys.sort.each do |path|
           paths[path].each do |path_opts|
@@ -65,6 +66,9 @@ module VagrantPlugins
               "vagrant.rsync_auto_path",
               path: path.to_s,
             ))
+
+            # @TODO: This is broken. The last machine's latency will win.
+            latency = path_opts[:machine].config.gatling.latency
           end
         end
 
@@ -74,8 +78,7 @@ module VagrantPlugins
           @logger.info("  -- #{ignore.to_s}")
         end
 
-        # @TODO: Make this a configuration option.
-        latency = 1.5
+        puts latency
 
         case RUBY_PLATFORM
         when /darwin/
@@ -88,9 +91,6 @@ module VagrantPlugins
         end
 
         0
-      end
-
-      def listen_linux
       end
 
       # This callback gets called when any directory changes.

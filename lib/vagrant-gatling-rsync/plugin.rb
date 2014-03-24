@@ -30,6 +30,11 @@ module VagrantPlugins
         require_relative "command/rsync_auto"
         GatlingRsyncAuto
       end
+
+      config "gatling" do
+        require_relative "config"
+        Config
+      end
     end
   end
 end

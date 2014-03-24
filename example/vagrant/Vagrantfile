@@ -41,6 +41,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../files", "/opt/vagrant/rsynced_folder", type: "rsync",
     rsync__exclude: [".git/", ".idea/"]
 
+  # Configure the window for gatling to coalesce writes.
+  config.vm.gatling.latency = "asdlkj"
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
