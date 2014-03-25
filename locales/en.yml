@@ -4,5 +4,5 @@ en:
       only_osx_linux_support: |-
         This plugin currently only supports Max OS X and Linux hosts.
       vagrant_15_required: |-
-        This plugin requires Vagrant 1.5 or newer to function.
+        This plugin requires Vagrant 1.5.1 or newer to function.
 

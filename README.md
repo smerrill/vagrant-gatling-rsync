@@ -1,6 +1,6 @@
 # vagrant-gatling-rsync
 
-An rsync watcher for Vagrant 1.5+ that uses fewer host resources at the
+An rsync watcher for Vagrant 1.5.1+ that uses fewer host resources at the
 potential cost of more rsync actions.
 
 ## Getting started
