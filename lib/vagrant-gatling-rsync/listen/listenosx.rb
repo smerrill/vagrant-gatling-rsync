@@ -38,7 +38,7 @@ module VagrantPlugins
               }
               directories << change unless change.nil?
             end
-          rescue Timeout::Error
+          rescue Timeout::Error, ThreadError
             @logger.info("Breaking out of the loop at #{Time.now.to_s}.")
           end
 
