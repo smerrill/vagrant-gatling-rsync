@@ -1,3 +1,12 @@
+## 0.0.2 (April 27, 2014)
+
+Bugfix release.
+
+BUG FIXES:
+
+- Catch ThreadErrors (this sometimes happens in practice on OS X.)
+- Reflect that this plugin requires Vagrant 1.5.1+.
+
 ## 0.0.1 (March 23, 2014)
 
 Initial release.
