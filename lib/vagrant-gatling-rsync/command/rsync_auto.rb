@@ -122,9 +122,9 @@ module VagrantPlugins
           folders.each do |opts|
             ssh_info = opts[:machine].ssh_info
             if ssh_info
-	      VagrantPlugins::SyncedFolderRSync::RsyncHelper.rsync_single(opts[:machine], ssh_info, opts[:opts])
+              VagrantPlugins::SyncedFolderRSync::RsyncHelper.rsync_single(opts[:machine], ssh_info, opts[:opts])
             end
-	  end
+          end
         end
       end
     end
