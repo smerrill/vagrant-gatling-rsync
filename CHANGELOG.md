@@ -1,3 +1,11 @@
+## 0.0.3 (May 02, 2014)
+
+Bugfix release.
+
+BUG FIXES:
+
+- Fix the plugin under multi-box environments. Thanks to @mattchannelgrabber. [GH-5]
+
 ## 0.0.2 (April 27, 2014)
 
 Bugfix release.
