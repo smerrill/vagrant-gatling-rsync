@@ -1,3 +1,17 @@
+## 0.0.4 (August 24, 2014)
+
+This release adds notification of time and duration of rsyncs.
+
+It also adds the config.gatling.time_format configuration option to allow customization of the time format string when
+time information is printed to the console.
+
+It also updates the Gemfile to use Vagrant 1.6.4 so that I can test on Linux using the Docker provider. This should not
+have any impact on using the gem with 1.5.1+ versions of Vagrant, however.
+
+FEATURES:
+
+- Add output to note when an rsync finishes and how long it took. [GH-7, GH-10]
+
 ## 0.0.3 (May 02, 2014)
 
 Bugfix release.
