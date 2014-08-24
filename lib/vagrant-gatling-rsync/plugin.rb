@@ -12,7 +12,7 @@ end
 
 module VagrantPlugins
   module GatlingRsync
-    class Plugin < Vagrant.plugin("2")
+    class Plugin < Vagrant.plugin(2)
       name "Gatling Rsync"
       description <<-DESC
       Rsync large project directories to your Vagrant VM without using many resources on the host.
