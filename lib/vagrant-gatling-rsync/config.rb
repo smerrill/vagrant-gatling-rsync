@@ -2,15 +2,18 @@ require "vagrant"
 
 module VagrantPlugins
   module GatlingRsync
-    class Config < Vagrant.plugin("2", :config)
+    class Config < Vagrant.plugin(2, :config)
       attr_accessor :latency
+      attr_accessor :time_format
 
       def initialize
         @latency = UNSET_VALUE
+        @time_format = UNSET_VALUE
       end
 
       def finalize!
         @latency = 1.5 if @latency == UNSET_VALUE
+        @time_format = "%I:%M:%S %p" if @time_format == UNSET_VALUE
       end
 
       # @TODO: This does not appear to be called.

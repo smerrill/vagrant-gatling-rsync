@@ -121,11 +121,19 @@ module VagrantPlugins
         tosync.each do |folders|
           folders.each do |opts|
             ssh_info = opts[:machine].ssh_info
-            if ssh_info
-              VagrantPlugins::SyncedFolderRSync::RsyncHelper.rsync_single(opts[:machine], ssh_info, opts[:opts])
-            end
+            do_rsync(opts[:machine], ssh_info, opts[:opts]) if ssh_info
           end
         end
+      end
+
+      def do_rsync(machine, ssh_info, opts)
+        start_time = Time.new
+        VagrantPlugins::SyncedFolderRSync::RsyncHelper.rsync_single(machine, ssh_info, opts)
+        end_time = Time.new
+        machine.ui.info(I18n.t(
+          "vagrant_gatling_rsync.gatling_ran",
+          date: end_time.strftime(machine.config.gatling.time_format),
+          milliseconds: (end_time - start_time) * 1000))
       end
     end
   end
