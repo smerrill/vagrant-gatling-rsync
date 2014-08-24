@@ -12,6 +12,10 @@ FEATURES:
 
 - Add output to note when an rsync finishes and how long it took. [GH-7, GH-10]
 
+BUG FIXES:
+
+- The plugin now correctly outputs an error instead of failing to load on Vagrant versions < 1.5.1. [GH-11]
+
 ## 0.0.3 (May 02, 2014)
 
 Bugfix release.
