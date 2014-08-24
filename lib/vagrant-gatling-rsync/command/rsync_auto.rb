@@ -6,6 +6,12 @@ require "vagrant"
 module VagrantPlugins
   module GatlingRsync
     class GatlingRsyncAuto < Vagrant.plugin(2, :command)
+      # This is a sanity check to make sure no one is attempting to install
+      # this into an early Vagrant version.
+      if Vagrant::VERSION < "1.5.1"
+        raise Errors::Vagrant15RequiredError
+      end
+
       include Vagrant::Action::Builtin::MixinSyncedFolders
 
       def self.synopsis

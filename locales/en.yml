@@ -4,7 +4,7 @@ en:
       %{date}: The rsync operation completed in %{milliseconds} milliseconds.
     errors:
       only_osx_linux_support: |-
-        This plugin currently only supports Max OS X and Linux hosts.
+        The vagrant-gatling-rsync plugin currently only supports Max OS X and Linux hosts.
       vagrant_15_required: |-
-        This plugin requires Vagrant 1.5.1 or newer to function.
+        The vagrant-gatling-rsync plugin requires Vagrant 1.5.1 or newer to function.
 
