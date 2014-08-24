@@ -7,6 +7,18 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "hashicorp/precise64"
 
+  config.vm.provider "docker" do |d, override|
+    d.image = "smerrill/vagrant-centos"
+    d.has_ssh = true
+
+    # This is needed if you have non-Docker provisioners in the Vagrantfile.
+    override.vm.box = nil
+
+    # Ensure Vagrant knows the SSH port. See
+    # https://github.com/mitchellh/vagrant/issues/3772.
+    override.ssh.port = 22
+  end
+
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
