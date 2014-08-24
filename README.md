@@ -17,6 +17,11 @@ vagrant plugin install vagrant-gatling-rsync
 Add the following information to the Vagrantfile to set the coalescing
 threshold in seconds. If you do not set it, it will default to 1.5.
 
+You may also specify what
+[Time.strftime](http://www.ruby-doc.org/core-2.0.0/Time.html#method-i-strftime)
+options the plugin will use when it reports on completed rsyncs. The default is
+"%I:%M:%S %p".
+
 You will also need to have at least one synced folder set to type "rsync"
 to use the plugin.
 
@@ -32,6 +37,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure the window for gatling to coalesce writes.
   if Vagrant.has_plugin?("vagrant-gatling-rsync")
     config.gatling.latency = 2.5
+    config.gatling.time_format = "%H:%M:%S"
   end
 end
 ```
