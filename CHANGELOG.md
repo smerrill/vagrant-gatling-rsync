@@ -1,3 +1,11 @@
+## 0.1.0 (January 04, 2015)
+
+This release adds feature parity with Vagrant core rsync-auto by doing a sync when gatling-rsync is started.
+
+FEATURES:
+
+- Perform an initial rsync when the watcher starts. [GH-13]
+
 ## 0.0.4 (August 24, 2014)
 
 This release adds notification of time and duration of rsyncs.
