@@ -5,15 +5,22 @@ module VagrantPlugins
     class Config < Vagrant.plugin(2, :config)
       attr_accessor :latency
       attr_accessor :time_format
+      attr_accessor :rsync_on_startup
 
       def initialize
         @latency = UNSET_VALUE
         @time_format = UNSET_VALUE
+        @rsync_on_startup = UNSET_VALUE
       end
 
       def finalize!
         @latency = 1.5 if @latency == UNSET_VALUE
         @time_format = "%I:%M:%S %p" if @time_format == UNSET_VALUE
+        if @rsync_on_startup == UNSET_VALUE
+          @rsync_on_startup = false
+        else
+          @rsync_on_startup = !!@rsync_on_startup
+        end
       end
 
       # @TODO: This does not appear to be called.

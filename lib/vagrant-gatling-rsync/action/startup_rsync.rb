@@ -5,13 +5,18 @@ module VagrantPlugins
     class StartupRsync
       def initialize(app, env)
         @app = app
+        @gatling_startup_registered = false
       end
 
       def call(env)
         @app.call(env)
-        at_exit do
-          # @TODO: Ensure this only happens once.
 
+        # Ensure only one at_exit block is registered.
+        return unless @gatling_startup_registered == false
+
+        return unless env[:machine].config.gatling.rsync_on_startup == true
+
+        at_exit do
           unless $!.is_a?(SystemExit)
             env[:ui].warn "Vagrant's startup was interrupted by an exception."
             exit 1
@@ -27,6 +32,8 @@ module VagrantPlugins
           env[:ui].info "Invoking gatling-rsync-auto."
           env[:machine].env.cli("gatling-rsync-auto")
         end
+
+        @gatling_startup_registered = true
       end
     end
   end

@@ -26,9 +26,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../files", "/opt/vagrant/rsynced_folder", type: "rsync",
     rsync__exclude: [".git/", ".idea/"]
 
-  # Configure the window for gatling to coalesce writes. Note that when using
-  # outside of a development environment like this one, you should wrap these
-  # statements in an 'if Vagrant.has_plugin?("vagrant-gatling-rsync")' test.
+  # When using gatling rsync in your projects, you should wrap these configs in
+  # an 'if Vagrant.has_plugin?("vagrant-gatling-rsync")' test.
+
+  # Configure the window for gatling to coalesce writes.
   config.gatling.latency = 0.4
   config.gatling.time_format = "%H:%M:%S"
+
+  # Gatling rsync can run `vagrant gatling-rsync-auto` after the machines in
+  # your Vagrant environment start if you set this to true.
+  config.gatling.rsync_on_startup = true
 end
