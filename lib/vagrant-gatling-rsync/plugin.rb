@@ -18,6 +18,11 @@ module VagrantPlugins
         I18n.reload!
       end
 
+      action_hook "startup-rsync" do |hook|
+        require_relative "action/startup_rsync"
+        hook.after Vagrant::Action::Builtin::SyncedFolders, StartupRsync
+      end
+
       command "gatling-rsync-auto" do
         setup_i18n
 
