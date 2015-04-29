@@ -18,7 +18,7 @@ module VagrantPlugins
         monitor = WDM::Monitor.new
         changes = Queue.new
         @paths.keys.each do |path|
-          monitor.watch_recursively(path) { |change| changes << change }
+          monitor.watch_recursively(path.dup) { |change| changes << change }
         end
         Thread.new { monitor.run! }
 

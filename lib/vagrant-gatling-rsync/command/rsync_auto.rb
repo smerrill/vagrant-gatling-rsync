@@ -94,9 +94,11 @@ module VagrantPlugins
           ListenOSX.new(paths, ignores, latency, @logger, self.method(:callback)).run
         when /linux/
           ListenLinux.new(paths, ignores, latency, @logger, self.method(:callback)).run
+        when /cygwin|mswin|mingw|bccwin|wince|emx/
+          ListenWindows.new(paths, ignores, latency, @logger, self.method(:callback)).run
         else
           # @TODO: Raise this earlier?
-          raise Errors::OnlyOSXLinuxSupportError
+          raise Errors::OSNotSupportedError
         end
 
         0

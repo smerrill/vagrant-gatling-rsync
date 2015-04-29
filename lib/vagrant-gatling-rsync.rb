@@ -14,6 +14,7 @@ module VagrantPlugins
     autoload :Errors, lib_path.join("errors")
     autoload :ListenOSX, lib_path.join("listen/listenosx")
     autoload :ListenLinux, lib_path.join("listen/listenlinux")
+    autoload :ListenWindows, lib_path.join("listen/listenwindows")
 
     # This returns the path to the source of this plugin.
     #

@@ -7,8 +7,8 @@ module VagrantPlugins
         error_namespace("vagrant_gatling_rsync.errors")
       end
 
-      class OnlyOSXLinuxSupportError < VagrantGatlingRsyncError
-        error_key(:only_osx_linux_support)
+      class OSNotSupportedError < VagrantGatlingRsyncError
+        error_key(:os_not_supported)
       end
 
       class Vagrant15RequiredError < VagrantGatlingRsyncError
