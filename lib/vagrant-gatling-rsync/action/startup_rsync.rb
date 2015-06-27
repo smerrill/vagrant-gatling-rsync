@@ -3,12 +3,18 @@ require "vagrant"
 module VagrantPlugins
   module GatlingRsync
     class StartupRsync
+      include Vagrant::Action::Builtin::MixinSyncedFolders
+
       def initialize(app, env)
         @app = app
         @gatling_startup_registered = false
+        @rsync_folder_count = 0
       end
 
       def call(env)
+        folders = synced_folders(env[:machine])
+        @rsync_folder_count += folders[:rsync].size if folders.key?(:rsync)
+
         @app.call(env)
 
         # Ensure only one at_exit block is registered.
@@ -28,8 +34,11 @@ module VagrantPlugins
             exit exit_status
           end
 
-          env[:ui].info I18n.t("vagrant_gatling_rsync.startup_sync")
-          env[:machine].env.cli("gatling-rsync-auto")
+          # Don't run if there are no rsynced folders.
+          unless @rsync_folder_count == 0 then
+            env[:ui].info I18n.t("vagrant_gatling_rsync.startup_sync")
+            env[:machine].env.cli("gatling-rsync-auto")
+          end
         end
 
         @gatling_startup_registered = true
