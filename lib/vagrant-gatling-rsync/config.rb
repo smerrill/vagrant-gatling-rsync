@@ -17,7 +17,7 @@ module VagrantPlugins
         @latency = 1.5 if @latency == UNSET_VALUE
         @time_format = "%I:%M:%S %p" if @time_format == UNSET_VALUE
         if @rsync_on_startup == UNSET_VALUE
-          @rsync_on_startup = false
+          @rsync_on_startup = true
         else
           @rsync_on_startup = !!@rsync_on_startup
         end

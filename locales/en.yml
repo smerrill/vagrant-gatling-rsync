@@ -2,6 +2,8 @@ en:
   vagrant_gatling_rsync:
     gatling_ran: |-
       %{date}: The rsync operation completed in %{milliseconds} milliseconds.
+    startup_sync: |-
+      vagrant-gatling-auto is starting the sync engine. To disable this behavior, set `config.gatling.rsync_on_startup = false` in your Vagrantfile.
     errors:
       os_not_supported: |-
         The vagrant-gatling-rsync plugin does not support your OS.

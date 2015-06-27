@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "centos/7"
 
   config.vm.provider "docker" do |d, override|
     d.image = "smerrill/vagrant-centos"
@@ -33,7 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.gatling.latency = 0.4
   config.gatling.time_format = "%H:%M:%S"
 
-  # Gatling rsync can run `vagrant gatling-rsync-auto` after the machines in
-  # your Vagrant environment start if you set this to true.
+  # Gatling rsync will run `vagrant gatling-rsync-auto` after the machines in
+  # your Vagrant environment start unles you set this to false.
   config.gatling.rsync_on_startup = true
 end

@@ -28,8 +28,7 @@ module VagrantPlugins
             exit exit_status
           end
 
-          # @TODO: Translate.
-          env[:ui].info "Invoking gatling-rsync-auto."
+          env[:ui].info I18n.t("vagrant_gatling_rsync.startup_sync")
           env[:machine].env.cli("gatling-rsync-auto")
         end
 

@@ -19,6 +19,7 @@ module VagrantPlugins
       end
 
       action_hook "startup-rsync" do |hook|
+        setup_i18n
         require_relative "action/startup_rsync"
         hook.after Vagrant::Action::Builtin::SyncedFolders, StartupRsync
       end
