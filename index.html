@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Vagrant-gatling-rsync by smerrill</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Vagrant-gatling-rsync</h1>
+        <p class="header">An rsync watcher for Vagrant 1.5.1+ that uses fewer host resources.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/smerrill/vagrant-gatling-rsync/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/smerrill/vagrant-gatling-rsync/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/smerrill/vagrant-gatling-rsync">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/smerrill">smerrill</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="vagrant-gatling-rsync" class="anchor" href="#vagrant-gatling-rsync" aria-hidden="true"><span class="octicon octicon-link"></span></a>vagrant-gatling-rsync</h1>
+
+<p>An rsync watcher for Vagrant 1.5.1+ that uses fewer host resources at the
+potential cost of more rsync actions.</p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<p>To get started, you need to have Vagrant 1.5.1 installed on your Linux or
+Mac OS X host machine. To install the plugin, use the following command.</p>
+
+<div class="highlight highlight-bash"><pre>vagrant plugin install vagrant-gatling-rsync</pre></div>
+
+<h2>
+<a id="working-with-this-plugin" class="anchor" href="#working-with-this-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with this plugin</h2>
+
+<p>Add the following information to the Vagrantfile to set the coalescing
+threshold in seconds. If you do not set it, it will default to 1.5.</p>
+
+<p>You may also specify what
+<a href="http://www.ruby-doc.org/core-2.0.0/Time.html#method-i-strftime">Time.strftime</a>
+options the plugin will use when it reports on completed rsyncs. The default is
+"%I:%M:%S %p".</p>
+
+<p>You will also need to have at least one synced folder set to type "rsync"
+to use the plugin.</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">VAGRANTFILE_API_VERSION</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>
+
+<span class="pl-c1">Vagrant</span>.configure(<span class="pl-c1">VAGRANTFILE_API_VERSION</span>) <span class="pl-k">do </span>|<span class="pl-smi">config</span>|
+  config.vm.box <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hashicorp/precise64<span class="pl-pds">"</span></span>
+
+  config.vm.synced_folder <span class="pl-s"><span class="pl-pds">"</span>../files<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>/opt/vagrant/rsynced_folder<span class="pl-pds">"</span></span>, <span class="pl-c1">type:</span> <span class="pl-s"><span class="pl-pds">"</span>rsync<span class="pl-pds">"</span></span>,
+    <span class="pl-c1">rsync__exclude:</span> [<span class="pl-s"><span class="pl-pds">"</span>.git/<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>.idea/<span class="pl-pds">"</span></span>]
+
+  <span class="pl-c"># Configure the window for gatling to coalesce writes.</span>
+  <span class="pl-k">if</span> <span class="pl-c1">Vagrant</span>.has_plugin?(<span class="pl-s"><span class="pl-pds">"</span>vagrant-gatling-rsync<span class="pl-pds">"</span></span>)
+    config.gatling.latency <span class="pl-k">=</span> <span class="pl-c1">2.5</span>
+    config.gatling.time_format <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>%H:%M:%S<span class="pl-pds">"</span></span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>With the Vagrantfile configured in this fashion, you can run the following
+command to sync files.</p>
+
+<div class="highlight highlight-bash"><pre>vagrant gatling-rsync-auto</pre></div>
+
+<h2>
+<a id="why-gatling" class="anchor" href="#why-gatling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why "gatling"?</h2>
+
+<p>The gatling gun was the first gun capable of firing continuously.</p>
+
+<h2>
+<a id="this-plugin" class="anchor" href="#this-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>This plugin</h2>
+
+<p>The built-in rsync-auto plugin sometimes uses a lot of CPU and disk I/O when
+it starts up on very large rsynced directories. This plugin is designed to
+work well with such large rsynced folders.</p>
+
+<p>The rsync-auto command that ships with Vagrant 1.5 uses the listen gem. The
+Listen gem is quite thorough - it uses Celluloid to spin up an actor system
+and it checks file contents on OS X to ensure that running "touch" on a file
+(to do a write but not update its content) will not fire the rsync command.</p>
+
+<p>The downside of using Listen is that it takes a large amount of host resources
+to monitor large directory structures. This gem works well with to monitor
+directories hierarchies with 10,000-100,000 files.</p>
+
+<p>This gem's implementation is much closer to the underlying fsevent or inotify
+APIs, which allows for higher performance.</p>
+
+<h2>
+<a id="event-coalescing" class="anchor" href="#event-coalescing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Event coalescing</h2>
+
+<p>This plugin also coalesces events for you. The default latency is 1.5 seconds.
+It is configurable through the <code>config.gatling.latency</code> parameter.
+If you specify a latency of two seconds, this plugin will not fire a
+<code>vagrant rsync</code> until two contiguous seconds without file events have passed.
+This will delay rsyncs from happening if many writes are happening on the host
+(during a <code>make</code> or a <code>git clone</code>, for example) until the activity has leveled off.</p>
+
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors</h2>
+
+<p>Steven Merrill (@stevenmerrill) originally had the idea to tap into rb-fsevent
+and rb-inotify to more efficiently rsync files.</p>
+
+<p>Doug Marcey (<a href="https://github.com/dougmarcey" class="user-mention">@dougmarcey</a>) provided considerable guidance in the implementation
+of the coalescing functionality and wrote the initial sketch of the Linux and
+Windows adapters.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
