@@ -39,8 +39,8 @@ potential cost of more rsync actions.</p>
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
 
-<p>To get started, you need to have Vagrant 1.5.1 installed on your Linux or
-Mac OS X host machine. To install the plugin, use the following command.</p>
+<p>To get started, you need to have Vagrant 1.5.1 installed on your Linux, Mac, or
+Windows host machine. To install the plugin, use the following command.</p>
 
 <div class="highlight highlight-bash"><pre>vagrant plugin install vagrant-gatling-rsync</pre></div>
 
@@ -71,12 +71,20 @@ to use the plugin.</p>
     config.gatling.latency <span class="pl-k">=</span> <span class="pl-c1">2.5</span>
     config.gatling.time_format <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>%H:%M:%S<span class="pl-pds">"</span></span>
   <span class="pl-k">end</span>
+
+  <span class="pl-c"># Automatically sync when machines with rsync folders come up.</span>
+  config.gatling.rsync_on_startup <span class="pl-k">=</span> <span class="pl-c1">true</span>
 <span class="pl-k">end</span></pre></div>
 
 <p>With the Vagrantfile configured in this fashion, you can run the following
 command to sync files.</p>
 
 <div class="highlight highlight-bash"><pre>vagrant gatling-rsync-auto</pre></div>
+
+<p>As of version 0.9.0, vagrant-gatling-rsync will automatically start the sync
+engine on <code>vagrant up</code> or <code>vagrant reload</code> when the machines that you bring up
+have one or more rsync folders defined.  You can disable this behavior by
+setting <code>config.gatling.rsync_on_startup</code> to false.</p>
 
 <h2>
 <a id="why-gatling" class="anchor" href="#why-gatling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why "gatling"?</h2>
@@ -121,6 +129,106 @@ and rb-inotify to more efficiently rsync files.</p>
 <p>Doug Marcey (<a href="https://github.com/dougmarcey" class="user-mention">@dougmarcey</a>) provided considerable guidance in the implementation
 of the coalescing functionality and wrote the initial sketch of the Linux and
 Windows adapters.</p>
+
+<h1>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelog</h1>
+
+<h2>
+<a id="090-june-28-2015" class="anchor" href="#090-june-28-2015" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.9.0 (June 28, 2015)</h2>
+
+<p>This release adds two big features: Windows support and automatic sync on startup.</p>
+
+<p>It also adds the <code>config.gatling.rsync_on_startup</code> configuration option to turn automatic rsync on startup off if you
+do not want it.</p>
+
+<p>It also updates the Gemfile to use Vagrant 1.7.2 for development. The gem should still work with Vagrant 1.5.1+.</p>
+
+<p>FEATURES:</p>
+
+<ul>
+<li>Add support for Windows. Thanks to <a href="https://github.com/mfradcourt" class="user-mention">@mfradcourt</a> for wiring it up. [GH-21]</li>
+<li>Add automatic sync startup on <code>vagrant up</code> or <code>vagrant reload</code> if rsync folders are present. [GH-14]</li>
+</ul>
+
+<h2>
+<a id="010-january-04-2015" class="anchor" href="#010-january-04-2015" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.1.0 (January 04, 2015)</h2>
+
+<p>This release adds feature parity with Vagrant core rsync-auto by doing a sync when gatling-rsync is started.</p>
+
+<p>FEATURES:</p>
+
+<ul>
+<li>Perform an initial rsync when the watcher starts. [GH-13]</li>
+</ul>
+
+<h2>
+<a id="004-august-24-2014" class="anchor" href="#004-august-24-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.0.4 (August 24, 2014)</h2>
+
+<p>This release adds notification of time and duration of rsyncs.</p>
+
+<p>It also adds the <code>config.gatling.time_format</code> configuration option to allow customization of the time format string when
+time information is printed to the console.</p>
+
+<p>It also updates the Gemfile to use Vagrant 1.6.4 so that I can test on Linux using the Docker provider. This should not
+have any impact on using the gem with 1.5.1+ versions of Vagrant, however.</p>
+
+<p>FEATURES:</p>
+
+<ul>
+<li>Add output to note when an rsync finishes and how long it took. [GH-7, GH-10]</li>
+</ul>
+
+<p>BUG FIXES:</p>
+
+<ul>
+<li>The plugin now correctly outputs an error instead of failing to load on Vagrant versions &lt; 1.5.1. [GH-11]</li>
+</ul>
+
+<h2>
+<a id="003-may-02-2014" class="anchor" href="#003-may-02-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.0.3 (May 02, 2014)</h2>
+
+<p>Bugfix release.</p>
+
+<p>BUG FIXES:</p>
+
+<ul>
+<li>Fix the plugin under multi-box environments. Thanks to <a href="https://github.com/mattchannelgrabber" class="user-mention">@mattchannelgrabber</a>. [GH-5]</li>
+</ul>
+
+<h2>
+<a id="002-april-27-2014" class="anchor" href="#002-april-27-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.0.2 (April 27, 2014)</h2>
+
+<p>Bugfix release.</p>
+
+<p>BUG FIXES:</p>
+
+<ul>
+<li>Catch ThreadErrors (this sometimes happens in practice on OS X.)</li>
+<li>Reflect that this plugin requires Vagrant 1.5.1+.</li>
+</ul>
+
+<h2>
+<a id="001-march-23-2014" class="anchor" href="#001-march-23-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>0.0.1 (March 23, 2014)</h2>
+
+<p>Initial release.</p>
+
+<p>FEATURES:</p>
+
+<ul>
+<li>Implement an rb-fsevent adapter for Mac.</li>
+<li>Implement an rb-inotify adapter for Linux.</li>
+<li>Add the <code>vagrant gatling-rsync-auto</code> command.</li>
+<li>Implement the first draft of a config option to allow changing the latency.</li>
+</ul>
+
+<h2>
+<a id="backlog" class="anchor" href="#backlog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backlog</h2>
+
+<ul>
+<li>Test and release the Windows adapter.</li>
+<li>Allow configuring and running the rsync daemon to avoid SSH overhead.</li>
+<li>Get latency validation working.</li>
+</ul>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
