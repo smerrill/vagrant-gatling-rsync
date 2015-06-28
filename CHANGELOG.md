@@ -1,3 +1,17 @@
+## 0.9.0 (June 28, 2015)
+
+This release adds two big features: Windows support and automatic sync on startup.
+
+It also adds the `config.gatling.rsync_on_startup` configuration option to turn automatic rsync on startup off if you
+do not want it.
+
+It also updates the Gemfile to use Vagrant 1.7.2 for development. The gem should still work with Vagrant 1.5.1+.
+
+FEATURES:
+
+- Add support for Windows. Thanks to @mfradcourt for wiring it up. [GH-21]
+- Add automatic sync startup on `vagrant up` or `vagrant reload` if rsync folders are present. [GH-14]
+
 ## 0.1.0 (January 04, 2015)
 
 This release adds feature parity with Vagrant core rsync-auto by doing a sync when gatling-rsync is started.
@@ -10,7 +24,7 @@ FEATURES:
 
 This release adds notification of time and duration of rsyncs.
 
-It also adds the config.gatling.time_format configuration option to allow customization of the time format string when
+It also adds the `config.gatling.time_format` configuration option to allow customization of the time format string when
 time information is printed to the console.
 
 It also updates the Gemfile to use Vagrant 1.6.4 so that I can test on Linux using the Docker provider. This should not

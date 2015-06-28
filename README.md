@@ -5,8 +5,8 @@ potential cost of more rsync actions.
 
 ## Getting started
 
-To get started, you need to have Vagrant 1.5.1 installed on your Linux or
-Mac OS X host machine. To install the plugin, use the following command.
+To get started, you need to have Vagrant 1.5.1 installed on your Linux, Mac, or
+Windows host machine. To install the plugin, use the following command.
 
 ```bash
 vagrant plugin install vagrant-gatling-rsync
@@ -39,6 +39,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.gatling.latency = 2.5
     config.gatling.time_format = "%H:%M:%S"
   end
+
+  # Automatically sync when machines with rsync folders come up.
+  config.gatling.rsync_on_startup = true
 end
 ```
 
@@ -48,6 +51,11 @@ command to sync files.
 ```bash
 vagrant gatling-rsync-auto
 ```
+
+As of version 0.9.0, vagrant-gatling-rsync will automatically start the sync
+engine on `vagrant up` or `vagrant reload` when the machines that you bring up
+have one or more rsync folders defined.  You can disable this behavior by
+setting `config.gatling.rsync_on_startup` to false.
 
 ## Why "gatling"?
 
