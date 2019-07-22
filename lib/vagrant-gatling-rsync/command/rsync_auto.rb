@@ -67,7 +67,11 @@ module VagrantPlugins
 
             if folder_opts[:exclude]
               Array(folder_opts[:exclude]).each do |pattern|
-                ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(hostpath, pattern.to_s)
+               if Vagrant::VERSION < "2.2.5"
+                 ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(hostpath, pattern.to_s)
+               else
+                 ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(pattern.to_s)
+                end
               end
             end
           end
