@@ -1,3 +1,13 @@
+## 1.0 (June 02, 2020)
+
+This release adds compatibility with Vagrant 2.2.5+.
+
+Small parts of the example Vagrantfile and the Gemfile and Gemspec have also been cleaned up.
+
+FEATURES:
+
+- Add compatibility with Vagrant 2.2.5+. Thanks to @leejo for the PR. [GH-37]
+
 ## 0.9.0 (June 28, 2015)
 
 This release adds two big features: Windows support and automatic sync on startup.
