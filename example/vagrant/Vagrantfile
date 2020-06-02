@@ -13,10 +13,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # This is needed if you have non-Docker provisioners in the Vagrantfile.
     override.vm.box = nil
-
-    # Ensure Vagrant knows the SSH port. See
-    # https://github.com/mitchellh/vagrant/issues/3772.
-    override.ssh.port = 22
   end
 
   config.vm.provider "lxc" do |d, override|
