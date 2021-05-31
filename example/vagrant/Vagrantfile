@@ -8,7 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "centos/7"
 
   config.vm.provider "docker" do |d, override|
-    d.image = "smerrill/vagrant-centos"
+    d.image = "smerrill/vagrant-ubuntu-focal"
     d.has_ssh = true
 
     # This is needed if you have non-Docker provisioners in the Vagrantfile.
@@ -29,6 +29,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Gatling rsync will run `vagrant gatling-rsync-auto` after the machines in
   # your Vagrant environment start unles you set this to false.
   config.gatling.rsync_on_startup = true
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Add a multi-box setup.
   config.vm.define "rsync", primary: true do |m|

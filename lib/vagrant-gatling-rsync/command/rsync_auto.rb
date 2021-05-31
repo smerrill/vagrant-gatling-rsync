@@ -8,7 +8,7 @@ module VagrantPlugins
     class GatlingRsyncAuto < Vagrant.plugin(2, :command)
       # This is a sanity check to make sure no one is attempting to install
       # this into an early Vagrant version.
-      if Vagrant::VERSION < "1.5.1"
+      if Gem::Version.new(Vagrant::VERSION) < Gem::Version.new("1.5.1")
         raise Errors::Vagrant15RequiredError
       end
 
@@ -67,7 +67,7 @@ module VagrantPlugins
 
             if folder_opts[:exclude]
               Array(folder_opts[:exclude]).each do |pattern|
-               if Vagrant::VERSION < "2.2.5"
+               if Gem::Version.new(Vagrant::VERSION) < Gem::Version.new("2.2.5")
                  ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(hostpath, pattern.to_s)
                else
                  ignores << VagrantPlugins::SyncedFolderRSync::RsyncHelper.exclude_to_regexp(pattern.to_s)
